@@ -3,9 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/de62180d47.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../public/css/home/style.css" />
+
     <title>Project Manager</title>
   </head>
   <body>
-    <h1>Project Manager</h1>
+    <div class="main">
+      <header>
+        <nav>
+          <p>Home</p>
+          <p>Projects</p>
+        </nav>
+      </header>
+      <form action="">
+        <div>
+          <p>Add your project here</p>
+        </div>
+        <button type="submit" class="add">Add project</button>
+        <img src="../public/imgs/Hand Drawn Right Arrow.png" alt="" />
+        <div class="formDiv">
+          <p>Name:</p>
+          <input type="text" name="name" />
+        </div>
+        <div class="formDiv">
+          <p>Description:</p>
+          <input type="text" name="description" />
+        </div>
+        <div class="formDiv">
+          <p>Image:</p>
+          <input type="file" name="image" class="image" />
+        </div>
+        <div class="formDiv">
+          <p>GitHub Url:</p>
+          <input type="text" name="githubUrl" />
+        </div>
+      </form>
+    </div>
   </body>
 </html>

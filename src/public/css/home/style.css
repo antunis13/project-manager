@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Kanit", sans-serif;
+  height: 100vh;
+  background: rgb(219, 223, 244);
+  background: linear-gradient(347deg, rgb(219, 223, 244) 0%, rgb(244, 242, 253) 41%, rgb(249, 250, 255) 100%);
+  background-repeat: no-repeat;
+}
+
+.main {
+  border-radius: 10px;
+  box-shadow: 2px 5px 2px 5px rgb(219, 223, 244);
+  background-color: white;
+  width: 90%;
+  height: 80vh;
+  margin: 20px auto;
+  padding: 10px;
+}
+.main header nav {
+  margin: 20px;
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
+}
+.main form {
+  margin-left: 3%;
+  margin-top: 20px;
+  width: 50%;
+  padding: 10px;
+}
+.main form img {
+  width: 30px;
+  height: 30px;
+  transform: scaleX(-1);
+  position: relative;
+  left: 75%;
+  top: 10px;
+}
+.main form .formDiv {
+  margin: 10px 0 10px 0;
+}
+.main form .formDiv input {
+  margin-top: 3px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(242, 242, 244, 0.858);
+  padding: 5px;
+}
+.main form .formDiv .image {
+  margin-top: 3px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(242, 242, 244, 0.858);
+  padding: 5px;
+}
+.main form .add {
+  position: relative;
+  left: 70%;
+  top: 10px;
+  padding: 7px;
+  color: white;
+  background-color: rgb(118, 225, 118);
+  border: none;
+  border-radius: 5px;
+}/*# sourceMappingURL=style.css.map */
