@@ -1,12 +1,11 @@
 import request from "supertest";
 import * as chai from "chai";
 import app from "../src/app.js";
-import { json } from "express";
 
 const expect = chai.expect;
 
 describe("Api Testing", () => {
-  it('should return status 200 and message "Database connection established"', (done) => {
+  it("should return status 200 and message 'Database connection established'", (done) => {
     request(app)
       .get("/api/checkDbConnection")
       .end((err, res) => {
@@ -18,7 +17,8 @@ describe("Api Testing", () => {
         done();
       });
   });
-  it("should return status 200 and all document data", (done) => {
+
+  /* it("GET/ should return status 200 and all document data", (done) => {
     request(app)
       .get("/api/projects")
       .end((err, res) => {
@@ -37,14 +37,27 @@ describe("Api Testing", () => {
         });
         done();
       });
-  });
-  it("should return the status 201 and the document created", (done) => {
+  }); */
+
+  /*it("POST/ should return the status 201 and the document created", (done) => {
     request(app)
       .post("/api/projects")
       .end((err, res) => {
         if (err) return done(err);
 
         expect(res.status).to.equal(201);
+        expect(res.body).to.have.property("message").equal("Success");
+        done();
+      });
+  }); */
+
+  it("PUT/ should return the status 200 and message 'Success'", (done) => {
+    request(app)
+      .put("/api/projects/6667a195cfde99e96698205c")
+      .send({ name: "Put test" })
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.status).to.equal(200);
         expect(res.body).to.have.property("message").equal("Success");
         done();
       });

@@ -31,7 +31,18 @@ async function post(req, res) {
   }
 }
 
+async function put(req, res) {
+  const { id } = req.params
+
+  const projects = await ProjectModel.findById({ _id: id })
+
+  await projects.updateOne(req.body)
+
+  res.status(200).json({ message: 'Success', projects })
+}
+
 module.exports = {
   get,
   post,
+  put,
 }
