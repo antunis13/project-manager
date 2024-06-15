@@ -24,10 +24,10 @@ async function post(req, res) {
     register.save()
 
     res.status(201).json({
-      message: 'Success',
+      message: 'Success. Document created',
     })
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao adicionar projeto', error })
+    res.status(500).json({ message: 'Error creating project', error })
   }
 }
 
@@ -38,11 +38,26 @@ async function put(req, res) {
 
   await projects.updateOne(req.body)
 
-  res.status(200).json({ message: 'Success', projects })
+  res.status(200).json({ message: 'Success. Document updated', projects })
+}
+
+async function remove(req, res) {
+  const { id } = req.params
+
+  const projects = await ProjectModel.findById({ _id: id })
+
+  if (!projects) {
+    return res.status(404).send({ message: 'Project not found' })
+  }
+
+  await projects.deleteOne(req.body)
+
+  res.status(204).send()
 }
 
 module.exports = {
   get,
   post,
   put,
+  remove,
 }

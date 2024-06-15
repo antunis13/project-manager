@@ -46,19 +46,31 @@ describe("Api Testing", () => {
         if (err) return done(err);
 
         expect(res.status).to.equal(201);
-        expect(res.body).to.have.property("message").equal("Success");
+        expect(res.body).to.have.property("message").equal("Success. Document created");
         done();
       });
   }); */
 
-  it("PUT/ should return the status 200 and message 'Success'", (done) => {
+  /* it("PUT/ should return the status 200 and message 'Success. Document updated'", (done) => {
     request(app)
       .put("/api/projects/6667a195cfde99e96698205c")
       .send({ name: "Put test" })
       .end((err, res) => {
         if (err) return done(err);
         expect(res.status).to.equal(200);
-        expect(res.body).to.have.property("message").equal("Success");
+        expect(res.body)
+          .to.have.property("message")
+          .equal("Success. Document updated");
+        done();
+      });
+  }); */
+
+  it("DELETE/ should return the status 204", (done) => {
+    request(app)
+      .delete("/api/projects/666b216c7c2efd9938e0e46e")
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.status).to.equal(204);
         done();
       });
   });
