@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/src/public/css/home/style.css">
-  <title>Formulario</title>
-</head>
-<body>
-  <header class="cabecalho">
-    <a href="" class="cabecalho__link">Home</a>
-    <a href="" class="cabecalho__link">Projects</a>
-  </header>
-  <h1 class="titulo-principal">Add your project here</h1>
-  <section class="principal">
-    <ul class="principal__lista-conteudo">
-      <li class="principal__item">
-        <h2 class="principal__item-titulo">Name</h2>
-        <input type="text" class="principal__item-input">
-      </li>
-      <li class="principal__item">
-        <h2 class="principal__item-titulo">Image</h2>
-        <input type="url" class="principal__item-input">
-      </li>
-      <li class="principal__item">
-        <h2 class="principal__item-titulo">Description</h2>
-        <input type="text" class="principal__item-input">
-      </li>
-      <li class="principal__item">
-        <h2 class="principal__item-titulo">GitHub Url</h2>
-        <input type="text" class="principal__item-input">
-      </li>
-    </ul>
-    <button class="principal__botao">Add Project</button>
-  </section>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/public/css/home/style.css" />
+    <title>Formulario</title>
+  </head>
+  <body>
+    <header class="cabecalho">
+      <a href="" class="cabecalho__link">Home</a>
+      <a href="" class="cabecalho__link">Projects</a>
+    </header>
+    <h1 class="titulo-principal">Add your project here</h1>
+    <section class="principal">
+      <form id="form" action="">
+        <ul class="principal__lista-conteudo">
+          <li class="principal__item">
+            <h2 class="principal__item-titulo">Name</h2>
+            <input type="text" name="name" class="principal__item-input" />
+          </li>
+          <li class="principal__item">
+            <h2 class="principal__item-titulo">Image</h2>
+            <input type="url" name="image" class="principal__item-input" />
+          </li>
+          <li class="principal__item">
+            <h2 class="principal__item-titulo">Description</h2>
+            <input
+              type="text"
+              name="description"
+              class="principal__item-input"
+            />
+          </li>
+          <li class="principal__item">
+            <h2 class="principal__item-titulo">GitHub Url</h2>
+            <input type="text" name="url" class="principal__item-input" />
+          </li>
+        </ul>
+        <button class="principal__botao" id="submit" type="submit">
+          Add Project
+        </button>
+      </form>
+    </section>
+
+    <script src="./js/main.js"></script>
+  </body>
 </html>
