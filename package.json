@@ -10,7 +10,7 @@
     "supertest": "^7.0.0"
   },
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "node src/server.js",
     "test": "mocha --experimental-modules"
   }
 }
