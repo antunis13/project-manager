@@ -8,7 +8,7 @@ async function connect() {
   mongoose.set('debug', true)
   try {
     await mongoose.connect(
-      `mongodb://${user}:${password}@127.0.0.1:27017/projectManager?authSource=admin`
+      `mongodb+srv://${user}:${password}@mongocluster.4hjigqt.mongodb.net/`
     )
     const db = mongoose.connection
 
