@@ -33,3 +33,4 @@ btnSubmit.onclick = function (e) {
     .catch((error) => {
       console.log('Erro do catch: ', error)
     })
+}
