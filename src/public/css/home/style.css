@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
-*{
+* {
   margin: 0;
   padding: 0;
 }
 
-:root{
-  --cor-background: linear-gradient(45deg,#9119E0 100%, #490D72 0%);
+:root {
+  --cor-background: linear-gradient(45deg, #9119e0 100%, #490d72 0%);
   --cor-branco: #fff;
   --cor-preto: #000;
-  --cor-roxo: #9119E0;
+  --cor-roxo: #9119e0;
   --fonte-principal: 'Krona One', sans-serif;
 }
 
-body{
+body {
   height: 100vh;
   background: var(--cor-background);
   background-repeat: no-repeat;
@@ -20,11 +20,11 @@ body{
   font-family: var(--fonte-principal);
 }
 
-.cabecalho{
+.cabecalho {
   margin: 3rem 5rem;
 }
 
-.cabecalho__link{
+.cabecalho__link {
   background-color: var(--cor-branco);
   color: var(--cor-roxo);
   text-decoration: none;
@@ -37,21 +37,21 @@ body{
   margin-left: 2rem;
 }
 
-.titulo-principal{
+.titulo-principal {
   text-align: center;
   margin: 6rem 0 2rem 0;
   font-size: 3rem;
   font-weight: 500;
 }
 
-.principal{
+.principal {
   display: flex;
-  
+
   flex-direction: column;
   align-items: center;
 }
 
-.principal__lista-conteudo{
+.principal__lista-conteudo {
   display: grid;
   width: 80%;
   height: 45vh;
@@ -60,16 +60,16 @@ body{
   place-items: center;
 }
 
-.principal__item{
+.principal__item {
   list-style: none;
 }
 
-.principal__item-titulo{
+.principal__item-titulo {
   font-size: 2.5rem;
   font-weight: 500;
 }
 
-.principal__item-input{
+.principal__item-input {
   margin-top: 1rem;
   padding: 1rem 25rem 1rem 2rem;
   border: 3px solid var(--cor-branco);
@@ -80,7 +80,7 @@ body{
   color: var(--cor-branco);
 }
 
-.principal__botao{
+.principal__botao {
   cursor: pointer;
   background-color: var(--cor-branco);
   color: var(--cor-roxo);
@@ -91,5 +91,12 @@ body{
 
   font-size: 2.5rem;
   font-family: var(--fonte-principal);
+}
 
+.removeBtn {
+  color: white;
+  border: none;
+  background-color: rgb(226, 40, 40);
+  border-radius: 10px;
+  padding: 5px;
 }
