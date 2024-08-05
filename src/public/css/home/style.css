@@ -23,14 +23,14 @@
 body{
     background: var(--cor-background);
     background-repeat: no-repeat;
-    height: 100vh;
+    height: 120vh;
     display: flex;
     font-family: var(--font-principal);
 }
 
 @media screen and (max-width: 1400px){
     body{
-        height: 150vh;
+        height: 160vh;
     }
 }
 
