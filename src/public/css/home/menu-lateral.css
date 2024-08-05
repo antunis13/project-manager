@@ -9,15 +9,7 @@
     }
 }
 
-@keyframes hidden {
-    0%{
-        left: 0px;
-    }
 
-    100%{
-        left: -1000px;
-    }
-}
 
 .menu-lateral{
     width: 20%;
@@ -34,9 +26,26 @@
     animation: ativo 1s ease-in-out forwards;
 }
 
-.hidden{
-    width: 0%;
-    animation: hidden 1s ease-in-out forwards;
+
+
+.menu-lateral__hamburguer{
+    font-size: 3rem;
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+
+    color: var(--cor-letra);
+}
+
+.botao__hamburguer{
+    background-color: transparent;
+    border: transparent;
+    padding: .5rem 1rem;
+}
+
+.botao__hamburguer i{
+    font-size: 3rem;
+    color: var(--cor-letra);
 }
 
 
