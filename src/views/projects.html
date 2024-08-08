@@ -1,23 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/src/public/css/home/style.css" />
     <title>Projects</title>
-</head>
-<body>
+  </head>
+  <body>
     <header class="cabecalho">
-        <a href="index.html" class="cabecalho__link  botao__home">Home</a>
-        <a href="projects.html" class="cabecalho__link botao__projects">Projects</a>
+      <a href="index.html" class="cabecalho__link botao__home">Home</a>
+      <a href="projects.html" class="cabecalho__link botao__projects"
+        >Projects</a
+      >
     </header>
 
     <section class="principal__projects">
-        <div id="projects-list">
+      <div id="projects-list"></div>
 
-        </div>
+      <div id="updtForm" class="updateFrm hidden">
+        <ul>
+          <li>
+            <p>Image:</p>
+            <input type="image" id="img" name="img" />
+          </li>
+          <li>
+            <p>Name:</p>
+            <input type="text" id="name" name="name" />
+          </li>
+          <li>
+            <p>Description:</p>
+            <input type="text" id="description" name="description" />
+          </li>
+          <li>
+            <p>Github Url;</p>
+            <input type="text" id="url" name="url" />
+          </li>
+        </ul>
+
+        <a href="#" class="saveBtn" id="saveBtn">Save changes</a>
+        <a href="#" class="cancelBtn" id="cancelBtn">Cancel</a>
+      </div>
     </section>
 
     <script src="js/projects.js"></script>
-</body>
+  </body>
 </html>

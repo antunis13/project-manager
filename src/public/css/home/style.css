@@ -4,34 +4,38 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Krona+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+  --cor-background: linear-gradient(
+    180deg,
+    rgba(25, 152, 224, 1) 0%,
+    rgba(13, 17, 114, 1) 100%
+  );
+  --cor-background-card: linear-gradient(
+    180deg,
+    rgba(49, 46, 198, 1) 60%,
+    rgba(24, 22, 96, 1) 90%
+  );
+  --cor-cinza: #dcdcdc;
+  --cor-letra: #fff;
+  --cor-letra-botao: #0d1172;
+  --cor-link: rgba(15, 13, 114, 0.5);
 
-
-
-:root{
-    --cor-background: linear-gradient(180deg, rgba(25,152,224,1) 0%, rgba(13,17,114,1) 100%);
-    --cor-background-card: linear-gradient(180deg, rgba(49,46,198,1) 60%, rgba(24,22,96,1) 90%);
-    --cor-cinza: #dcdcdc;
-    --cor-letra: #fff;
-    --cor-letra-botao: #0D1172;
-    --cor-link: rgba(15, 13, 114, 0.5);
-
-
-    --font-principal: "Krona One", sans-serif;
-    --font-secundaria: "Montserrat", sans-serif;
+  --font-principal: 'Krona One', sans-serif;
+  --font-secundaria: 'Montserrat', sans-serif;
 }
 
-body{
-    background: var(--cor-background);
-    background-repeat: no-repeat;
-    height: 100vh;
-    display: flex;
-    font-family: var(--font-principal);
+body {
+  background: var(--cor-background);
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  font-family: var(--font-principal);
 }
 
-@media screen and (max-width: 1400px){
-    body{
-        height: 150vh;
-    }
+@media screen and (max-width: 1400px) {
+  body {
+    height: 150vh;
+  }
 }
 
 .removeBtn {
@@ -40,4 +44,13 @@ body{
   background-color: rgb(226, 40, 40);
   border-radius: 10px;
   padding: 5px;
+}
+.hidden {
+  display: none;
+}
+.updateFrm {
+  margin: 10px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
 }
