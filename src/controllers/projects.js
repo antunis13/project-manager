@@ -38,17 +38,35 @@ async function post(req, res) {
 
 async function put(req, res) {
   const { id } = req.params
+  const { name, url, description, image } = req.body
+
+  console.log('id:', id)
 
   try {
-    const projects = await ProjectModel.findById({ _id: id })
+    const project = await ProjectModel.findById(id)
 
-    await projects.updateOne(req.body)
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' })
+    }
+
+    project.name = name !== undefined ? name : project.name
+    project.url = url !== undefined ? url : project.url
+    project.description =
+      description !== undefined ? description : project.description
+    project.image = image !== undefined ? image : project.image
+
+    const updatedProject = await project.save()
+
     res.status(200).json({
       message: 'Success. Document updated',
-      data,
+      data: updatedProject,
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error updating project', error })
+    console.error('Error updating project:', error)
+    res.status(500).json({
+      message: 'Error updating project',
+      error: error.message || error,
+    })
   }
 }
 
