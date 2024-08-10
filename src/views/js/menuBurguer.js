@@ -1,7 +1,6 @@
 const btnHamburguer = document.querySelector('#btnHamburguer')
 const menuLista = document.querySelector('.menu-lateral__lista')
 const principal = document.querySelector('#principal')
-const iconMenuLateral = ''
 
 btnHamburguer.addEventListener('click', () => {
   menuLista.classList.toggle('ativo')

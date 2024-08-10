@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/src/public/css/home/reset.css" />
 
     <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <title>Projects</title>
   </head>
@@ -16,18 +16,18 @@
     <aside class="menu-lateral">
       <div class="menu-lateral__hamburguer">
         <button id="btnHamburguer" class="botao__hamburguer">
-          <i class="bi bi-list" id="menu-hamburguer-icons"></i>
+          <i class="bi bi-arrow-left" id="menu-hamburguer-icons"></i>
         </button>
       </div>
 
       <ul class="menu-lateral__lista ativo">
-        <li class="item-menu">
+        <li class="item-menu hidden__button" id="item-menu">
           <a href="index.html">
             <span class="icon"><i class="bi bi-code-slash"></i></span>
             <span class="txt-link">add Code</span>
           </a>
         </li>
-        <li class="item-menu hidden__button">
+        <li class="item-menu ">
           <a href="projects.html">
             <span class="icon"><i class="bi bi-collection"></i></span>
             <span class="txt-link">Projects</span>
@@ -64,7 +64,60 @@
       </div>
     </section>
 
+    </aside>
+
+    <main class="principal" id="principal">
+        <section class="principal__projects">
+        <h2 class="projects__titulo">
+            Your projects:
+        </h2>
+
+            <ul id="projects-list" class="projects__lista">
+                <li class="lista-item">
+                    <img src="/src/public/imgs/image 3.svg" alt="" class="imagem-pc">
+                    <img src="/src/public/imgs/image 3 (1).svg" alt="" class="imagem-tablet">
+                    <div class="item__conteudo">
+                        <h2 class="conteudo__titulo">
+                            Name bla bla
+                        </h2>
+                        <p class="conteudo__descricao">
+                            Qualquer descrição bla bla bla bla bla
+                        </p>
+                        <i class="bi bi-github"></i>
+                    </div>
+                </li>
+
+                <li class="lista-item">
+                    <img src="/src/public/imgs/image 3.svg" alt="" class="imagem-pc">
+                    <div class="item__conteudo">
+                        <h2 class="conteudo__titulo">
+                            Name bla bla
+                        </h2>
+                        <p class="conteudo__descricao">
+                            Qualquer descrição bla bla bla bla bla
+                        </p>
+                        <i class="bi bi-github"></i>
+                    </div>
+                </li>
+
+                <li class="lista-item">
+                    <img src="/src/public/imgs/image 3.svg" alt="" class="imagem-pc">
+                    <img src="/src/public/imgs/image 3 (1).svg" alt="" class="imagem-tablet">
+                    <div class="item__conteudo">
+                        <h2 class="conteudo__titulo">
+                            Name bla bla
+                        </h2>
+                        <p class="conteudo__descricao">
+                            Qualquer descrição bla bla bla bla bla
+                        </p>
+                        <i class="bi bi-github"></i>
+                    </div>
+                </li>
+                
+            </ul>
+        </section>
+    </main>
     <script src="js/projects.js"></script>
     <script src="/src/views/js/menuBurguer.js"></script>
-  </body>
+</body>
 </html>
