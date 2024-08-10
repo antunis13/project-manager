@@ -1,4 +1,4 @@
-const btnSubmit = document.querySelector('#submit')
+const btnSubmit = document.querySelector('#btnSubmit')
 
 const form = document.querySelector('#form')
 
