@@ -1,28 +1,68 @@
 <!DOCTYPE html>
-<html lang="pt-br" data-contexto="background">
-<head>
+<html lang="pt-br">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/src/public/css/home/style.css" />
     <link rel="stylesheet" href="/src/public/css/home/reset.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <script src="/src/views/js/main.js" defer></script>
-    <script src="/src/views/js/menuBurguer.js" defer></script>
-    <script src="/src/views/js/projects.js" defer></script>
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <title>Projects</title>
-</head>
-<body>
+  </head>
+  <body>
     <aside class="menu-lateral">
-        <div class="menu-lateral__hamburguer">
-            <button id="btnHamburguer" class="botao__hamburguer">
-                <i class="bi bi-arrow-left" id="menu-hamburguer-icons"></i>
-            </button>
-        </div>
+      <div class="menu-lateral__hamburguer">
+        <button id="btnHamburguer" class="botao__hamburguer">
+          <i class="bi bi-list" id="menu-hamburguer-icons"></i>
+        </button>
+      </div>
+
+      <ul class="menu-lateral__lista ativo">
+        <li class="item-menu">
+          <a href="index.html">
+            <span class="icon"><i class="bi bi-code-slash"></i></span>
+            <span class="txt-link">add Code</span>
+          </a>
+        </li>
+        <li class="item-menu hidden__button">
+          <a href="projects.html">
+            <span class="icon"><i class="bi bi-collection"></i></span>
+            <span class="txt-link">Projects</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <section class="principal__projects">
+      <div id="projects-list"></div>
+
+      <div id="updtForm" class="updateFrm hidden">
+        <ul>
+          <li>
+            <p>Image:</p>
+            <input type="image" id="img" name="img" />
+          </li>
+          <li>
+            <p>Name:</p>
+            <input type="text" id="name" name="name" />
+          </li>
+          <li>
+            <p>Description:</p>
+            <input type="text" id="description" name="description" />
+          </li>
+          <li>
+            <p>Github Url;</p>
+            <input type="text" id="url" name="url" />
+          </li>
+        </ul>
+
+        <a href="#" class="saveBtn" id="saveBtn">Save changes</a>
+        <a href="#" class="cancelBtn" id="cancelBtn">Cancel</a>
+      </div>
+    </section>
 
     <ul class="menu-lateral__lista ativo">
         <li class="item-menu hidden__button">
@@ -93,5 +133,6 @@
         </section>
     </main>
     <script src="js/projects.js"></script>
-</body>
+    <script src="/src/views/js/menuBurguer.js"></script>
+  </body>
 </html>

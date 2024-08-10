@@ -26,10 +26,10 @@ body{
     font-family: var(--font-principal);
 }
 
-@media screen and (max-width: 1400px){
-    body{
-        height: 160vh;
-    }
+@media screen and (max-width: 1400px) {
+  body {
+    height: 160vh;
+  }
 }
 
 .removeBtn {
@@ -38,4 +38,13 @@ body{
     background-color: rgb(226, 40, 40);
     border-radius: 10px;
     padding: 5px;
+}
+.hidden {
+  display: none;
+}
+.updateFrm {
+  margin: 10px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
 }
