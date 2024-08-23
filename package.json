@@ -1,11 +1,9 @@
 {
   "dependencies": {
     "axios": "^1.7.2",
-    "chai": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mocha": "^10.4.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.1",
     "nodemon": "^3.1.0",
@@ -13,6 +11,9 @@
   },
   "scripts": {
     "dev": "node src/server.js",
-    "test": "mocha --experimental-modules"
+    "test": "jest --detectOpenHandles"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
