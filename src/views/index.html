@@ -1,89 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-br" >
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/src/public/css/home/style.css">
-    <link rel="stylesheet" href="/src/public/css/home/reset.css">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <title>add Projects</title>
-</head>
-<body>
-    
-    <aside class="menu-lateral">
-
-        <div class="menu-lateral__hamburguer " >
-            <button id="btnHamburguer" class="botao__hamburguer">
-                <i class="bi bi-arrow-left" id="menu-hamburguer-icons"></i>
-            </button>
-        </div>
-        
-        <ul class="menu-lateral__lista ativo">
-            <li class="item-menu">
-                <a href="index.html" >
-                    <span class="icon"><i class="bi bi-code-slash"></i></span>
-                    <span class="txt-link">add Code</span>
-                </a>
-            </li>
-            <li class="item-menu  hidden__button">
-                <a href="projects.html">
-                    <span class="icon"><i class="bi bi-collection"></i></span>
-                    <span class="txt-link">Projects</span>
-                </a>
-            </li>
-        </ul>
-    </aside>
-    
-    <main class="principal" id="principal">
-        <section class="principal__form">
-            
-            <h1 class="principal__titulo">
-                Add your project here
-            </h1>
-            
-            <form class="forms" >
-                <fieldset class="forms__item">                    
-                    <label class="form__label">
-                        Name
-                    </label>
-                    <input type="text" class="form__input" id="input-text"
-                    name="name">
-                </fieldset>
-                
-                <fieldset class="forms__item">                    
-                    <label class="form__label">
-                        Image
-                    </label>
-                    <fieldset class="form__image">
-                        <input type="image" class="form__input-image" id="input-image" name="image">
-                        <input type="image" class="form__input-image" id="input-image" name="image">
-                        <input type="image" class="form__input-image"id="input-image" name="image">
-                    </fieldset>
-                    
-                    <fieldset class="forms__item">                    
-                        <label class="form__label">
-                            Description
-                        </label>
-                        <input type="text" class="form__input"  name="description">
-                    </fieldset>
-                    
-                    <fieldset class="forms__item">                    
-                        <label class="form__label">
-                            Github Url
-                        </label>
-                        <input type="text" class="form__input"  name="url">
-                    </fieldset>
-                    
-                    <fieldset class="forms__item">
-                        <input type="submit" class="btn__submit" id="btnSubmit" value="add project">
-                    </fieldset>
-                    
-                </form>
-            </section>
-        </main>
-        <script src="/src/views/js/main.js"></script>
-        <script src="/src/views/js/menuBurguer.js"></script>
-    </body>
-    </html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Manager</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="main.jsx"></script>
+  </body>
+</html>
