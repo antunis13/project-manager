@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 import Header from '../reactComponents/Header'
-import Footer from '../reactComponents/Footer'
 
 export default function Home() {
   return (
