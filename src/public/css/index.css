@@ -5,5 +5,7 @@
 @layer base {
   body {
     @apply bg-slate-900 m-10;
+
+    @apply text-primary;
   }
 }
