@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import Header from '../reactComponents/Header'
 import Footer from '../reactComponents/Footer'
+import Card from '../reactComponents/Card'
 
 export default function Home() {
   return (
@@ -80,7 +81,12 @@ export default function Home() {
           </DialogContent>
         </Dialog>
       </div>
-
+      <section className="mx-auto my-8 w-full max-w-5xl px-6 md:max-w-7xl flex justify-center items-center flex-wrap">
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+      </section>
       <Footer />
     </>
   )

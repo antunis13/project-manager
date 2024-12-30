@@ -5,7 +5,6 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  root: "src/views",
   server: {
     port: 3000,
   },
