@@ -28,8 +28,11 @@ async function post(req, res) {
 
     register.save()
 
+    const id = register._id
+
     res.status(201).json({
       message: 'Success. Document created',
+      id: id,
     })
   } catch (error) {
     res.status(500).json({ message: 'Error creating project', error })
@@ -39,8 +42,6 @@ async function post(req, res) {
 async function put(req, res) {
   const { id } = req.params
   const { name, url, description, image } = req.body
-
-  console.log('id:', id)
 
   try {
     const project = await ProjectModel.findById(id)
@@ -71,15 +72,18 @@ async function put(req, res) {
 }
 
 async function remove(req, res) {
-  const { id } = req.params
+  try {
+    const { id } = req.params
+    console.log('id  do controller delete: ', id)
 
-  console.log('id: ', id)
-
-  const projects = await ProjectModel.findById({ _id: id })
-
-  await projects.deleteOne(req.body)
-
-  res.status(204).send()
+    await ProjectModel.deleteOne({ _id: id })
+    res.status(204).send()
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error removing project',
+      error,
+    })
+  }
 }
 
 module.exports = {
