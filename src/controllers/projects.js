@@ -1,4 +1,5 @@
 const ProjectModel = require('../models/projects')
+const mongoose = require('mongoose')
 
 async function get(req, res) {
   const { id } = req.params
@@ -9,13 +10,18 @@ async function get(req, res) {
     const projects = await ProjectModel.find(obj)
 
     console.log(projects)
-    res.send(projects)
+    await res.send(projects)
+
+    res.status(200)
   } catch (error) {
     res.status(500).json({ message: 'Error fetching projects', error })
   }
 }
 
 async function post(req, res) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ message: 'Error connecting to the database' })
+  }
   try {
     const { name, url, description, image } = req.body
 
@@ -26,7 +32,7 @@ async function post(req, res) {
       description,
     })
 
-    register.save()
+    await register.save()
 
     const id = register._id
 
@@ -35,16 +41,20 @@ async function post(req, res) {
       id: id,
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error creating project', error })
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ message: 'Validation failed' })
+    } else {
+      res.status(500).json({ message: 'Error creating project', error })
+    }
   }
 }
 
 async function put(req, res) {
-  const { id } = req.params
-  const { name, url, description, image } = req.body
-
   try {
-    const project = await ProjectModel.findById(id)
+    const { id } = req.params
+
+    const { name, url, description, image } = req.body
+    const project = await ProjectModel.findById({ _id: id })
 
     if (!project) {
       return res.status(404).json({ message: 'Project not found' })
@@ -58,7 +68,7 @@ async function put(req, res) {
 
     const updatedProject = await project.save()
 
-    res.status(200).json({
+    res.status(201).json({
       message: 'Success. Document updated',
       data: updatedProject,
     })
@@ -74,8 +84,6 @@ async function put(req, res) {
 async function remove(req, res) {
   try {
     const { id } = req.params
-    console.log('id  do controller delete: ', id)
-
     await ProjectModel.deleteOne({ _id: id })
     res.status(204).send()
   } catch (error) {

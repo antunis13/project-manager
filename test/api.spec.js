@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../src/app.js");
 const ProjectModel = require("../src/models/projects.js");
-const { setupDb, clearDb, tearDownDb } = require("./db-utils.js");
+const { setupDb, clearDb, tearDownDb, getId } = require("./db-utils.js");
 
 const seedProjects = [
   {
@@ -22,11 +22,12 @@ let id;
 
 beforeAll(async () => {
   await setupDb();
-  await ProjectModel.insertMany(seedProjects);
 });
 
-afterEach(async () => {
+beforeEach(async () => {
   await clearDb();
+  const inserted = await ProjectModel.insertMany(seedProjects);
+  id = inserted[0]._id.toString();
 });
 
 afterAll(async () => {
@@ -41,75 +42,93 @@ describe("POST api/projects", () => {
       url: "http://localhost:3000",
       image: "http://randomImage.com/imgs.jpg",
     };
-    try {
-      const res = await request(app).post("/api/projects").send(newProject);
-      expect(res.status).toEqual(201);
-      expect(res.body).toHaveProperty("id");
-      const responseId = JSON.parse(res.text);
 
-      expect(responseId).toHaveProperty("id");
+    const res = await request(app).post("/api/projects").send(newProject);
+    expect(res.body).toHaveProperty("id");
+    const responseId = JSON.parse(res.text);
 
-      id = responseId.id;
+    expect(responseId).toHaveProperty("id");
 
-      expect(res.body).toHaveProperty("message", "Success. Document created");
-    } catch (err) {
-      return err;
-    }
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("message", "Success. Document created");
+  });
+
+  it("POST/ should return 400 when trying to create an empty document", async () => {
+    const res = await request(app).post("/api/projects").send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message", "Validation failed");
+  });
+});
+
+describe("POST api/projects when DB is disconnected", () => {
+  it("POST/ should return 503 when trying to create with DB down", async () => {
+    await tearDownDb();
+    const newProject = {
+      name: "Post test",
+      description: "new description",
+      url: "http://localhost:3000",
+      image: "http://randomImage.com/imgs.jpg",
+    };
+
+    const res = await request(app).post("/api/projects").send(newProject);
+
+    expect(res.status).toBe(503);
+    expect(res.body).toHaveProperty(
+      "message",
+      "Error connecting to the database"
+    );
+    await setupDb();
   });
 });
 
 describe("GET api/projects:id?", () => {
   it("GET/ should return status 200 and all document data", async () => {
-    try {
-      const res = await request(app).get("/api/projects");
-      expect(res.status).toBe(200);
-      expect(res.body).toBe("array").toBeGreaterThan(0);
-      res.body.forEach((doc) => {
-        expect(doc).toHaveProperty("name");
-        expect(typeof doc.name).toBe("string");
-        expect(doc.name.length).toBeGreaterThan(0);
+    const res = await request(app).get("/api/projects");
+    expect(res.status).toBe(200);
+    console.log("GET body", res.body);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    res.body.forEach((doc) => {
+      expect(doc).toHaveProperty("name");
+      expect(typeof doc.name).toBe("string");
+      expect(doc.name.length).toBeGreaterThan(0);
 
-        expect(doc).toHaveProperty("description");
-        expect(typeof doc.description).toBe("string");
-        expect(doc.description.length).toBeGreaterThan(0);
+      expect(doc).toHaveProperty("description");
+      expect(typeof doc.description).toBe("string");
+      expect(doc.description.length).toBeGreaterThan(0);
 
-        expect(doc).toHaveProperty("url");
-        expect(typeof doc.url).toBe("string");
-        expect(doc.url.length).toBeGreaterThan(0);
+      expect(doc).toHaveProperty("url");
+      expect(typeof doc.url).toBe("string");
+      expect(doc.url.length).toBeGreaterThan(0);
 
-        expect(doc).toHaveProperty("image");
-        expect(typeof doc.image).toBe("string");
-        expect(doc.image.length).toBeGreaterThan(0);
-      });
-    } catch (err) {
-      return err;
-    }
+      expect(doc).toHaveProperty("image");
+      expect(typeof doc.image).toBe("string");
+      expect(doc.image.length).toBeGreaterThan(0);
+    });
   });
 });
 
 describe("PUT api/projects/:id", () => {
   it("PUT/ should return the status 200 and message 'Success. Document updated'", async () => {
-    try {
-      const res = await request(app)
-        .put(`/api/projects/${id}`)
-        .send({ name: "Put test" });
+    const res = await request(app).put(`/api/projects/${id}`).send({
+      name: "Put test",
+      description: "Put description",
+      url: "http://localhost:8080",
+      image: "http://randomImage.com/imgs.jpg",
+    });
 
-      expect(res.status).toEqual(200);
-      expect(res.body).toHaveProperty("message", "Success. Document updated");
-    } catch (err) {
-      return err;
-    }
+    console.log("ID PUT: ", id);
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("message", "Success. Document updated");
   });
 });
 
 describe("DELETE api/projects/:id", () => {
   it("DELETE/ should return the status 204", async () => {
-    try {
-      const res = await request(app).delete(`/api/projects/${id}`);
+    const res = await request(app).delete(`/api/projects/${id}`);
 
-      expect(res.status).toEqual(204);
-    } catch (err) {
-      return err;
-    }
+    expect(res.status).toBe(204);
   });
 });
