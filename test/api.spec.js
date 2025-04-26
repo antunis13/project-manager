@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../src/app.js");
 const ProjectModel = require("../src/models/projects.js");
-const { setupDb, clearDb, tearDownDb, getId } = require("./db-utils.js");
+const { setupDb, clearDb, tearDownDb } = require("./db-utils.js");
 
 const seedProjects = [
   {
@@ -86,7 +86,7 @@ describe("GET api/projects:id?", () => {
   it("GET/ should return status 200 and all document data", async () => {
     const res = await request(app).get("/api/projects");
     expect(res.status).toBe(200);
-    console.log("GET body", res.body);
+
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
     res.body.forEach((doc) => {
@@ -106,6 +106,70 @@ describe("GET api/projects:id?", () => {
       expect(typeof doc.image).toBe("string");
       expect(doc.image.length).toBeGreaterThan(0);
     });
+  });
+
+  it("GET/ should return status 200 and one document when try to find with Id", async () => {
+    const res = await request(app).get(`/api/projects/${id}`);
+    expect(res.status).toBe(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+
+    expect(res.body[0]).toHaveProperty("_id");
+    expect(res.body[0]._id).toBe(id);
+    expect(res.body[0]).toHaveProperty("name");
+    expect(typeof res.body[0].name).toBe("string");
+    expect(res.body[0].name.length).toBeGreaterThan(0);
+
+    expect(res.body[0]).toHaveProperty("description");
+    expect(typeof res.body[0].description).toBe("string");
+    expect(res.body[0].description.length).toBeGreaterThan(0);
+
+    expect(res.body[0]).toHaveProperty("url");
+    expect(typeof res.body[0].url).toBe("string");
+    expect(res.body[0].url.length).toBeGreaterThan(0);
+
+    expect(res.body[0]).toHaveProperty("image");
+    expect(typeof res.body[0].image).toBe("string");
+    expect(res.body[0].image.length).toBeGreaterThan(0);
+  });
+
+  it("GET/ should return nothing when the db is empty", async () => {
+    await clearDb();
+    const res = await request(app).get("/api/projects");
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body).toStrictEqual([]);
+    expect(res.body.length).toBe(0);
+
+    await setupDb();
+  });
+
+  it("GET/ should return a internal server error", async () => {
+    const spyFind = jest
+      .spyOn(ProjectModel, "find")
+      .mockImplementationOnce(() => {
+        throw new Error("Mock error");
+      });
+
+    const res = await request(app).get("/api/projects");
+
+    expect(res.status).toBe(500);
+    expect(res.body).toHaveProperty("message", "Error fetching projects");
+
+    spyFind.mockRestore();
+  });
+});
+
+describe("GET api/projects when DB is disconnected", () => {
+  it("GET/ should return 503 when trying to get documents with DB down", async () => {
+    await tearDownDb();
+    const res = await request(app).get("/api/projects");
+    expect(res.status).toBe(503);
+    expect(res.body).toHaveProperty(
+      "message",
+      "Error connecting to the database"
+    );
+    await setupDb();
   });
 });
 

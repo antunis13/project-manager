@@ -2,13 +2,15 @@ const ProjectModel = require('../models/projects')
 const mongoose = require('mongoose')
 
 async function get(req, res) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ message: 'Error connecting to the database' })
+  }
   const { id } = req.params
 
   const obj = id ? { _id: id } : null
 
   try {
     const projects = await ProjectModel.find(obj)
-
     console.log(projects)
     await res.send(projects)
 
