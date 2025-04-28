@@ -52,15 +52,24 @@ async function post(req, res) {
 }
 
 async function put(req, res) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ message: 'Error connecting to the database' })
+  }
   try {
     const { id } = req.params
+    const update = req.body
+
+    console.log('update no controller: ', update)
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: 'Project not found' })
+    }
+    if (!update || Object.keys(update).length == 0) {
+      return res.status(400).json({ message: 'Nothing to update' })
+    }
 
     const { name, url, description, image } = req.body
     const project = await ProjectModel.findById({ _id: id })
-
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' })
-    }
 
     project.name = name !== undefined ? name : project.name
     project.url = url !== undefined ? url : project.url

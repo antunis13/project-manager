@@ -187,6 +187,39 @@ describe("PUT api/projects/:id", () => {
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("message", "Success. Document updated");
   });
+  it("PUT/ should return error when the id is wrong", async () => {
+    const res = await request(app).put(`/api/projects/120921`).send({
+      name: "Failed Put test",
+    });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message", "Project not found");
+  });
+
+  it("PUT/ should return error when trying to use put without any updates", async () => {
+    const res = await request(app).put(`/api/projects/${id}`).send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message", "Nothing to update");
+  });
+});
+
+describe("PUT api/projects when DB is disconnected", () => {
+  it("PUT/ should return 503 when trying to update documents with DB down", async () => {
+    await tearDownDb();
+    const res = await request(app).put(`/api/projects/${id}`).send({
+      name: "Put test",
+      description: "Put description",
+      url: "http://localhost:8080",
+      image: "http://randomImage.com/imgs.jpg",
+    });
+    expect(res.status).toBe(503);
+    expect(res.body).toHaveProperty(
+      "message",
+      "Error connecting to the database"
+    );
+    await setupDb();
+  });
 });
 
 describe("DELETE api/projects/:id", () => {
