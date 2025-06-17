@@ -93,8 +93,14 @@ async function put(req, res) {
 }
 
 async function remove(req, res) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ message: 'Error connecting to the database' })
+  }
   try {
     const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: 'Project not found' })
+    }
     await ProjectModel.deleteOne({ _id: id })
     res.status(204).send()
   } catch (error) {

@@ -160,8 +160,8 @@ describe("GET api/projects:id?", () => {
   });
 });
 
-describe("GET api/projects when DB is disconnected", () => {
-  it("GET/ should return 503 when trying to get documents with DB down", async () => {
+describe("GET api/projects:id? when DB is disconnected", () => {
+  it("GET/ should return status 503 when trying to get documents with DB down", async () => {
     await tearDownDb();
     const res = await request(app).get("/api/projects");
     expect(res.status).toBe(503);
@@ -204,8 +204,8 @@ describe("PUT api/projects/:id", () => {
   });
 });
 
-describe("PUT api/projects when DB is disconnected", () => {
-  it("PUT/ should return 503 when trying to update documents with DB down", async () => {
+describe("PUT api/projects/:id when DB is disconnected", () => {
+  it("PUT/ should return status 503 when trying to update documents with DB down", async () => {
     await tearDownDb();
     const res = await request(app).put(`/api/projects/${id}`).send({
       name: "Put test",
@@ -227,5 +227,27 @@ describe("DELETE api/projects/:id", () => {
     const res = await request(app).delete(`/api/projects/${id}`);
 
     expect(res.status).toBe(204);
+  });
+
+  it("DELETE/ should return an error when the ID is wrong", async () => {
+    const res = await request(app).delete(`/api/projects/12334`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message", "Project not found");
+  });
+});
+
+describe("DELETE api/projects/:id when DB is disconnected", () => {
+  it("DELETE/ should return status 503 when trying to delete documents with DB down", async () => {
+    await tearDownDb();
+    const res = await request(app).delete(`/api/projects/${id}`);
+
+    expect(res.status).toBe(503);
+    expect(res.body).toHaveProperty(
+      "message",
+      "Error connecting to the database"
+    );
+
+    await setupDb();
   });
 });
