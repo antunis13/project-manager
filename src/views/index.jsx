@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -15,9 +16,27 @@ import { Textarea } from '@/components/ui/textarea'
 
 import Header from '../reactComponents/Header'
 import Footer from '../reactComponents/Footer'
-import Card from '../reactComponents/Card'
+import Cards from '../reactComponents/Card'
 
 export default function Home() {
+  const [projects, setProjects] = useState([])
+
+  useEffect(() => {
+    const getProjects = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/projects', {
+          method: 'GET',
+        })
+
+        const data = await res.json()
+
+        setProjects(data)
+      } catch (error) {
+        console.log('Error on get projects')
+      }
+    }
+    getProjects()
+  }, [])
   return (
     <>
       <Header />
@@ -82,10 +101,15 @@ export default function Home() {
         </Dialog>
       </div>
       <section className="mx-auto my-8 w-full max-w-5xl px-6 md:max-w-7xl flex justify-center items-center flex-wrap">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {projects.map((project) => (
+          <Cards
+            key={project.id}
+            img={project.image}
+            title={project.name}
+            description={project.description}
+            url={project.url}
+          />
+        ))}
       </section>
       <Footer />
     </>

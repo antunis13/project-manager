@@ -3,7 +3,6 @@ import {
   CardContent,
   CardDescription,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 
@@ -16,20 +15,20 @@ import {
 
 import { Button } from '@/components/ui/button'
 
-export default function Cards() {
+export default function Cards({ img, title, description, url }) {
   return (
     <>
       <div className="w-2/5 flex justify-center">
         <Card className="border-none">
           <CardContent className="flex flex-wrap items-center justify-center mt-1">
             <img
-              src="../../public/imgs/projectImage.webp"
+              src={img}
               className="rounded-lg w-full shadow-sm shadow-slate-200"
-              alt="Image"
+              alt="Project image"
             />
           </CardContent>
           <CardFooter>
-            <CardTitle className="text-center text-2xl mx-2">Anunx</CardTitle>
+            <CardTitle className="text-center text-2xl mx-2">{title}</CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 <Button className="rounded-full border-none bg-slate-900 hover:bg-slate-800 ease-in">
@@ -38,17 +37,12 @@ export default function Cards() {
               </DialogTrigger>
               <DialogContent>
                 <DialogTitle />
-                <p className="text-center my-1 text-slate-400">
-                  {' '}
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
+                <CardDescription> {description}</CardDescription>
                 <a href="#" className="text-center my-1">
-                  Project Repository
+                  Project Repository: {url}
                 </a>
+                <Button variant="outline">Update</Button>
+                <Button variant="outline">Delete</Button>
               </DialogContent>
             </Dialog>
           </CardFooter>
