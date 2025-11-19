@@ -1,14 +1,11 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-const user = process.env.DB_USER
-const password = process.env.DB_PASSWORD
+const dbName = process.env.DB_NAME
 
 async function connect() {
   try {
-    await mongoose.connect(
-      `mongodb+srv://${user}:${password}@mongocluster.4hjigqt.mongodb.net/?retryWrites=true&w=majority&appName=MongoCluster`
-    )
+    await mongoose.connect(`mongodb://localhost:27017/${dbName}`)
     const db = mongoose.connection
 
     db.on('error', console.error.bind(console, 'connection error: '))
