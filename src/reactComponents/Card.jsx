@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   Card,
   CardContent,
@@ -15,8 +17,19 @@ import {
 } from '@/components/ui/dialog'
 
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 
-export default function Cards({ img, title, description, url }) {
+export default function Cards({ id, img, title, description, url, onDelete }) {
+  const [open, setOpen] = useState()
+
+  const [confirmDelete, setConfirmDelete] = useState()
+
+  async function handleDelete() {
+    await onDelete(id)
+    setConfirmDelete(false)
+    setOpen(false)
+  }
+
   return (
     <>
       <div className="w-2/5 flex justify-center">
@@ -26,21 +39,51 @@ export default function Cards({ img, title, description, url }) {
           </CardContent>
           <CardFooter>
             <CardTitle className="text-center text-2xl mx-2">{title}</CardTitle>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button className="rounded-full border-none bg-slate-900 hover:bg-slate-800 ease-in">
                   <img src="../../public/imgs/moreIcon.png" width="25px" />
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <DialogTitle />
-                <CardDescription> {description}</CardDescription>
-                <a href="#" className="text-center my-1">
-                  Project Repository: {url}
-                </a>
+                <CardDescription>{description}</CardDescription>
+                <CardContent>
+                  <Label className="m-4 ">Repository</Label>
+                  <a href="#" className="text-center my-1">
+                    {url}
+                  </a>
+                </CardContent>
                 <DialogFooter>
                   <Button variant="outline">Update</Button>
-                  <Button variant="outline">Delete</Button>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => setConfirmDelete(true)}
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+              <DialogContent>
+                <DialogTitle>Are you sure?</DialogTitle>
+                <CardDescription>
+                  This action cannot be undone. The project will be permanently
+                  deleted.
+                </CardDescription>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setConfirmDelete(false)}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button variant="destructive" onClick={handleDelete}>
+                    Yes
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

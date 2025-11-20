@@ -24,6 +24,7 @@ import Cards from '../reactComponents/Card'
 
 export default function Home() {
   const [projects, setProjects] = useState([])
+
   const {
     register,
     handleSubmit,
@@ -46,6 +47,18 @@ export default function Home() {
       setProjects(result)
     } catch (error) {
       console.log('Error on find project by name: ', error)
+    }
+  }
+
+  const deleteProject = async (id) => {
+    try {
+      await fetch(`http://localhost:8080/api/projects/${id}`, {
+        method: 'DELETE',
+      })
+
+      setProjects((prev) => prev.filter((p) => p._id !== id))
+    } catch (error) {
+      console.log('Error on delete project: ', error)
     }
   }
 
@@ -171,14 +184,16 @@ export default function Home() {
           </DialogContent>
         </Dialog>
       </div>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 place-items-center">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 place-items-center m-10">
         {projects.map((project) => (
           <Cards
-            key={project.id}
+            key={project._id}
+            id={project._id}
             img={project.image}
             title={project.name}
             description={project.description}
             url={project.url}
+            onDelete={deleteProject}
           />
         ))}
       </section>
