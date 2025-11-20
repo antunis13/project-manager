@@ -5,16 +5,21 @@ async function get(req, res) {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({ message: 'Error connecting to the database' })
   }
-  const { id } = req.params
-
-  const obj = id ? { _id: id } : null
 
   try {
-    const projects = await ProjectModel.find(obj)
-    console.log(projects)
-    await res.send(projects)
+    const { name } = req.query
 
-    res.status(200)
+    if (name) {
+      const project = await ProjectModel.find({
+        name: { $regex: name, $options: 'i' },
+      })
+
+      return res.status(200).json(project)
+    }
+
+    const projects = await ProjectModel.find()
+
+    return res.status(200).json(projects)
   } catch (error) {
     res.status(500).json({ message: 'Error fetching projects', error })
   }

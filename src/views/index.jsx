@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dialog'
 
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -32,6 +31,23 @@ export default function Home() {
   } = useForm({
     resolver: yupResolver(schema),
   })
+
+  const { register: registerSearch, handleSubmit: handleSubmitSearch } =
+    useForm()
+
+  const onSearch = async (data) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/projects/?name=${data.search}`
+      )
+      const result = await res.json()
+      console.log(result)
+
+      setProjects(result)
+    } catch (error) {
+      console.log('Error on find project by name: ', error)
+    }
+  }
 
   useEffect(() => {
     const getProjects = async () => {
@@ -68,8 +84,14 @@ export default function Home() {
     <>
       <Header />
       <div className="flex justify-end gap-2">
-        <form>
-          <Input name="id" placeholder="Search" />
+        <form onSubmit={handleSubmitSearch(onSearch)}>
+          <Input
+            name="name"
+            type="text"
+            placeholder="Search"
+            {...registerSearch('search')}
+          />
+          <button type="submit" hidden></button>
         </form>
         <Dialog className="border-2">
           <DialogTrigger asChild>

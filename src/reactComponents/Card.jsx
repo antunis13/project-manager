@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogTrigger,
   DialogTitle,
+  DialogFooter,
 } from '@/components/ui/dialog'
 
 import { Button } from '@/components/ui/button'
@@ -37,8 +38,10 @@ export default function Cards({ img, title, description, url }) {
                 <a href="#" className="text-center my-1">
                   Project Repository: {url}
                 </a>
-                <Button variant="outline">Update</Button>
-                <Button variant="outline">Delete</Button>
+                <DialogFooter>
+                  <Button variant="outline">Update</Button>
+                  <Button variant="outline">Delete</Button>
+                </DialogFooter>
               </DialogContent>
             </Dialog>
           </CardFooter>
