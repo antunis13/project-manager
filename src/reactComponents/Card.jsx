@@ -19,13 +19,9 @@ export default function Cards({ img, title, description, url }) {
   return (
     <>
       <div className="w-2/5 flex justify-center">
-        <Card className="border-none">
+        <Card className="border-none rounded-lg">
           <CardContent className="flex flex-wrap items-center justify-center mt-1">
-            <img
-              src={img}
-              className="rounded-lg w-full shadow-sm shadow-slate-200"
-              alt="Project image"
-            />
+            <img src={img} className="rounded-lg w-full" alt="Project image" />
           </CardContent>
           <CardFooter>
             <CardTitle className="text-center text-2xl mx-2">{title}</CardTitle>

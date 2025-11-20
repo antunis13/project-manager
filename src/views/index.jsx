@@ -9,10 +9,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import schema from '../utils/formValidation'
 
 import Header from '../reactComponents/Header'
 import Footer from '../reactComponents/Footer'
@@ -20,6 +25,13 @@ import Cards from '../reactComponents/Card'
 
 export default function Home() {
   const [projects, setProjects] = useState([])
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
 
   useEffect(() => {
     const getProjects = async () => {
@@ -37,6 +49,21 @@ export default function Home() {
     }
     getProjects()
   }, [])
+
+  const onSubmit = async (data) => {
+    try {
+      await fetch('http://localhost:8080/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+    } catch (error) {
+      console.log('Error on craete project: ', error)
+    }
+  }
+
   return (
     <>
       <Header />
@@ -60,47 +87,69 @@ export default function Home() {
                 Show us everything about your best projects!
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input id="name" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="image" className="text-right">
-                  Image
-                </Label>
-                <Input type="file" id="image" className="col-span-3 p-2" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Textarea id="description" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="url" className="text-right">
-                  Url
-                </Label>
-                <Input type="url" id="url" className="col-span-3" />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose>
-                <Button type="button" variant="outline">
-                  Cancel
-                </Button>
-              </DialogClose>
 
-              <Button type="submit" className="text-black">
-                Save project
-              </Button>
-            </DialogFooter>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-2 items-center gap-4">
+                  <Input
+                    type="text"
+                    id="name"
+                    placeholder="Name"
+                    className="col-span-3 p-6"
+                    {...register('name')}
+                  />
+                  <p className="text-red-500 text-xs">{errors.name?.message}</p>
+                </div>
+                <div className="grid grid-cols-2 items-center gap-4">
+                  <Input
+                    type="url"
+                    id="image"
+                    placeholder="Image"
+                    className="col-span-3 p-6"
+                    {...register('image')}
+                  />
+                  <p className="text-red-500 text-xs">
+                    {errors.image?.message}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 items-center gap-4">
+                  <Textarea
+                    id="description"
+                    placeholder="Description"
+                    className="col-span-3"
+                    {...register('description')}
+                  />
+                  <p className="text-red-500 text-xs">
+                    {errors.description?.message}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 items-center gap-4">
+                  <Input
+                    type="url"
+                    id="url"
+                    placeholder="URL"
+                    className="col-span-3 p-6"
+                    {...register('url')}
+                  />
+                  <p className="text-red-500 text-xs">{errors.url?.message}</p>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose>
+                  <Button type="button" variant="outline">
+                    Cancel
+                  </Button>
+                </DialogClose>
+
+                <Button type="submit" className="text-black">
+                  Save project
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
-      <section className="mx-auto my-8 w-full max-w-5xl px-6 md:max-w-7xl flex justify-center items-center flex-wrap">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 place-items-center">
         {projects.map((project) => (
           <Cards
             key={project.id}
