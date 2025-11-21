@@ -36,32 +36,6 @@ export default function Home() {
   const { register: registerSearch, handleSubmit: handleSubmitSearch } =
     useForm()
 
-  const onSearch = async (data) => {
-    try {
-      const res = await fetch(
-        `http://localhost:8080/api/projects/?name=${data.search}`
-      )
-      const result = await res.json()
-      console.log(result)
-
-      setProjects(result)
-    } catch (error) {
-      console.log('Error on find project by name: ', error)
-    }
-  }
-
-  const deleteProject = async (id) => {
-    try {
-      await fetch(`http://localhost:8080/api/projects/${id}`, {
-        method: 'DELETE',
-      })
-
-      setProjects((prev) => prev.filter((p) => p._id !== id))
-    } catch (error) {
-      console.log('Error on delete project: ', error)
-    }
-  }
-
   useEffect(() => {
     const getProjects = async () => {
       try {
@@ -79,6 +53,20 @@ export default function Home() {
     getProjects()
   }, [])
 
+  const onSearch = async (data) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/projects/?name=${data.search}`
+      )
+      const result = await res.json()
+      console.log(result)
+
+      setProjects(result)
+    } catch (error) {
+      console.log('Error on find project by name: ', error)
+    }
+  }
+
   const onSubmit = async (data) => {
     try {
       await fetch('http://localhost:8080/api/projects', {
@@ -90,6 +78,38 @@ export default function Home() {
       })
     } catch (error) {
       console.log('Error on craete project: ', error)
+    }
+  }
+
+  const deleteProject = async (id) => {
+    try {
+      await fetch(`http://localhost:8080/api/projects/${id}`, {
+        method: 'DELETE',
+      })
+
+      setProjects((prev) => prev.filter((p) => p._id !== id))
+    } catch (error) {
+      console.log('Error on delete project: ', error)
+    }
+  }
+
+  const updateProject = async (id, updatedData) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/projects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      })
+
+      const updatedProject = await res.json()
+
+      console.log('Projetos atualizados: ', updatedProject)
+
+      setProjects((prev) =>
+        prev.map((p) => (p._id === id ? updatedProject.data : p))
+      )
+    } catch (error) {
+      console.log('Error on update project: ', error)
     }
   }
 
@@ -194,6 +214,7 @@ export default function Home() {
             description={project.description}
             url={project.url}
             onDelete={deleteProject}
+            onUpdate={updateProject}
           />
         ))}
       </section>

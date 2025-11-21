@@ -10,23 +10,60 @@ import {
 
 import {
   Dialog,
+  DialogHeader,
   DialogContent,
   DialogTrigger,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog'
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
-export default function Cards({ id, img, title, description, url, onDelete }) {
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import schema from '../utils/formValidation'
+
+export default function Cards({
+  id,
+  img,
+  title,
+  description,
+  url,
+  onDelete,
+  onUpdate,
+}) {
   const [open, setOpen] = useState()
+  const [openEdit, setOpenEdit] = useState(false)
 
   const [confirmDelete, setConfirmDelete] = useState()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: title,
+      description: description,
+      image: img,
+      url: url,
+    },
+  })
 
   async function handleDelete() {
     await onDelete(id)
     setConfirmDelete(false)
+    setOpen(false)
+  }
+
+  async function handleUpdate(data) {
+    await onUpdate(id, data)
+    setOpenEdit(false)
     setOpen(false)
   }
 
@@ -54,7 +91,9 @@ export default function Cards({ id, img, title, description, url, onDelete }) {
                   </a>
                 </CardContent>
                 <DialogFooter>
-                  <Button variant="outline">Update</Button>
+                  <Button variant="outline" onClick={() => setOpenEdit(true)}>
+                    Update
+                  </Button>
 
                   <Button
                     variant="outline"
@@ -85,6 +124,78 @@ export default function Cards({ id, img, title, description, url, onDelete }) {
                     Yes
                   </Button>
                 </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit</DialogTitle>
+                </DialogHeader>
+
+                <form onSubmit={handleSubmit(handleUpdate)}>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <Input
+                        type="text"
+                        id="name"
+                        placeholder="Name"
+                        className="col-span-3 p-6"
+                        {...register('name')}
+                      />
+
+                      <p className="text-red-500 text-xs">
+                        {errors.name?.message}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <Input
+                        type="url"
+                        id="image"
+                        placeholder="Image"
+                        className="col-span-3 p-6"
+                        {...register('image')}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.image?.message}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <Textarea
+                        id="description"
+                        placeholder="Description"
+                        className="col-span-3"
+                        {...register('description')}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.description?.message}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <Input
+                        type="url"
+                        id="url"
+                        placeholder="URL"
+                        className="col-span-3 p-6"
+                        {...register('url')}
+                      />
+                      <p className="text-red-500 text-xs">
+                        {errors.url?.message}
+                      </p>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <DialogClose>
+                      <Button type="button" variant="outline">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+
+                    <Button type="submit" className="text-black">
+                      Save changes
+                    </Button>
+                  </DialogFooter>
+                </form>
               </DialogContent>
             </Dialog>
           </CardFooter>
