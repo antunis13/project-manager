@@ -19,7 +19,7 @@ const seedProjects = [
 ];
 
 let id;
-
+let name;
 beforeAll(async () => {
   await setupDb();
 });
@@ -28,6 +28,7 @@ beforeEach(async () => {
   await clearDb();
   const inserted = await ProjectModel.insertMany(seedProjects);
   id = inserted[0]._id.toString();
+  name = inserted[0].name;
 });
 
 afterAll(async () => {
@@ -108,8 +109,8 @@ describe("GET api/projects:id?", () => {
     });
   });
 
-  it("GET/ should return status 200 and one document when try to find with Id", async () => {
-    const res = await request(app).get(`/api/projects/${id}`);
+  it("GET/ should return status 200 and one document when try to find with the document name", async () => {
+    const res = await request(app).get(`/api/projects/?name=${name}`);
     expect(res.status).toBe(200);
 
     expect(Array.isArray(res.body)).toBe(true);
