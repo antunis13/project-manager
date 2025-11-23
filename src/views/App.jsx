@@ -1,30 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from '@clerk/clerk-react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import ProtectedRoute from '../reactComponents/ProtectedRoute.jsx'
 import Home from './index.jsx'
-import SignInPage from '@/pages/SignIn.jsx'
+import SignInPage from '@/pages/signIn.jsx'
 
-const App = () => {
-  return (
-    <Router>
-      <header>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signIn" element={<SignInPage />} />
-      </Routes>
-    </Router>
-  )
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/signIn',
+    element: <SignInPage />,
+  },
+])
+
+export default function App() {
+  return <RouterProvider router={router} />
 }
-export default App
