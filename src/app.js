@@ -1,3 +1,4 @@
+const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node')
 const express = require('express')
 const cors = require('cors')
 
@@ -12,6 +13,6 @@ app.use(cors())
 
 app.use(express.json())
 
-app.use('/api', projectRoutes)
+app.use('/api', ClerkExpressRequireAuth(), projectRoutes)
 
 module.exports = app

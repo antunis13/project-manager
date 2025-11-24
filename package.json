@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@clerk/clerk-react": "^5.56.2",
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
@@ -28,6 +29,7 @@
     "yup": "^1.7.1"
   },
   "scripts": {
+    "start": "node src/server.js",
     "dev": "concurrently \"node src/server.js\" \"vite\"",
     "vite": "vite",
     "test": "jest --detectOpenHandles",

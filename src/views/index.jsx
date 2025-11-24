@@ -21,9 +21,12 @@ import schema from '../utils/formValidation'
 import Header from '../reactComponents/Header'
 import Footer from '../reactComponents/Footer'
 import Cards from '../reactComponents/Card'
+import { useAuth } from '@clerk/clerk-react'
 
 export default function Home() {
   const [projects, setProjects] = useState([])
+
+  const { getToken } = useAuth()
 
   const {
     register,
@@ -39,8 +42,12 @@ export default function Home() {
   useEffect(() => {
     const getProjects = async () => {
       try {
+        const token = await getToken()
         const res = await fetch('http://localhost:8080/api/projects', {
           method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
 
         const data = await res.json()
@@ -55,8 +62,15 @@ export default function Home() {
 
   const onSearch = async (data) => {
     try {
+      const token = await getToken()
+
       const res = await fetch(
-        `http://localhost:8080/api/projects/?name=${data.search}`
+        `http://localhost:8080/api/projects/?name=${data.search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       const result = await res.json()
       console.log(result)
@@ -69,9 +83,11 @@ export default function Home() {
 
   const onSubmit = async (data) => {
     try {
+      const token = await getToken()
       await fetch('http://localhost:8080/api/projects', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
@@ -83,8 +99,12 @@ export default function Home() {
 
   const deleteProject = async (id) => {
     try {
+      const token = await getToken()
       await fetch(`http://localhost:8080/api/projects/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
 
       setProjects((prev) => prev.filter((p) => p._id !== id))
@@ -95,9 +115,13 @@ export default function Home() {
 
   const updateProject = async (id, updatedData) => {
     try {
+      const token = await getToken()
       const res = await fetch(`http://localhost:8080/api/projects/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(updatedData),
       })
 

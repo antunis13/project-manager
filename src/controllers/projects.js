@@ -7,17 +7,18 @@ async function get(req, res) {
   }
 
   try {
+    const { userId } = req.auth
     const { name } = req.query
 
-    if (name) {
-      const project = await ProjectModel.find({
-        name: { $regex: name, $options: 'i' },
-      })
-
-      return res.status(200).json(project)
+    const query = {
+      ownerId: userId,
     }
 
-    const projects = await ProjectModel.find()
+    if (name) {
+      query.name = { $regex: name, $options: 'i' }
+    }
+
+    const projects = await ProjectModel.find(query)
 
     return res.status(200).json(projects)
   } catch (error) {
@@ -30,6 +31,8 @@ async function post(req, res) {
     return res.status(503).json({ message: 'Error connecting to the database' })
   }
   try {
+    const { userId } = req.auth
+
     const { name, url, description, image } = req.body
 
     const register = new ProjectModel({
@@ -37,6 +40,7 @@ async function post(req, res) {
       image,
       url,
       description,
+      ownerId: userId,
     })
 
     await register.save()
@@ -66,15 +70,17 @@ async function put(req, res) {
 
     console.log('update no controller: ', update)
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ message: 'Project not found' })
-    }
     if (!update || Object.keys(update).length == 0) {
       return res.status(400).json({ message: 'Nothing to update' })
     }
 
+    const project = await ProjectModel.findById(id)
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' })
+    }
+
     const { name, url, description, image } = req.body
-    const project = await ProjectModel.findById({ _id: id })
 
     project.name = name !== undefined ? name : project.name
     project.url = url !== undefined ? url : project.url
@@ -103,9 +109,13 @@ async function remove(req, res) {
   }
   try {
     const { id } = req.params
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+
+    const project = await ProjectModel.findById(id)
+
+    if (!project) {
       return res.status(404).json({ message: 'Project not found' })
     }
+
     await ProjectModel.deleteOne({ _id: id })
     res.status(204).send()
   } catch (error) {
