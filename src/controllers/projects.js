@@ -116,7 +116,7 @@ async function remove(req, res) {
       return res.status(404).json({ message: 'Project not found' })
     }
 
-    await ProjectModel.deleteOne({ _id: id })
+    await ProjectModel.deleteOne(project)
     res.status(204).send()
   } catch (error) {
     res.status(500).json({

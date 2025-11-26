@@ -1,7 +1,14 @@
 const request = require("supertest");
+const mongoose = require("mongoose");
 const app = require("../src/app.js");
 const ProjectModel = require("../src/models/projects.js");
 const { setupDb, clearDb, tearDownDb } = require("./db-utils.js");
+const {
+  createTestUser,
+  createUserSession,
+  createSessionToken,
+  deleteUser,
+} = require("./clerkTest-utils.js");
 
 const seedProjects = [
   {
@@ -20,19 +27,35 @@ const seedProjects = [
 
 let id;
 let name;
+
 beforeAll(async () => {
   await setupDb();
+  const user = await createTestUser();
+  const session = await createUserSession(user.id);
+  const token = await createSessionToken(session.id);
+
+  console.log("user: ", user);
+
+  global.sessionToken = token.jwt;
+  global.userId = user.id;
 });
 
 beforeEach(async () => {
   await clearDb();
-  const inserted = await ProjectModel.insertMany(seedProjects);
+  const inserted = await ProjectModel.insertMany(
+    seedProjects.map((p) => ({
+      ...p,
+      ownerId: global.userId,
+    }))
+  );
+
   id = inserted[0]._id.toString();
   name = inserted[0].name;
 });
 
 afterAll(async () => {
   await tearDownDb();
+  await deleteUser(global.userId);
 });
 
 describe("POST api/projects", () => {
@@ -44,7 +67,10 @@ describe("POST api/projects", () => {
       image: "http://randomImage.com/imgs.jpg",
     };
 
-    const res = await request(app).post("/api/projects").send(newProject);
+    const res = await request(app)
+      .post("/api/projects")
+      .send(newProject)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
     expect(res.body).toHaveProperty("id");
     const responseId = JSON.parse(res.text);
 
@@ -55,7 +81,10 @@ describe("POST api/projects", () => {
   });
 
   it("POST/ should return 400 when trying to create an empty document", async () => {
-    const res = await request(app).post("/api/projects").send({});
+    const res = await request(app)
+      .post("/api/projects")
+      .send({})
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("message", "Validation failed");
@@ -72,7 +101,10 @@ describe("POST api/projects when DB is disconnected", () => {
       image: "http://randomImage.com/imgs.jpg",
     };
 
-    const res = await request(app).post("/api/projects").send(newProject);
+    const res = await request(app)
+      .post("/api/projects")
+      .send(newProject)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(503);
     expect(res.body).toHaveProperty(
@@ -85,7 +117,9 @@ describe("POST api/projects when DB is disconnected", () => {
 
 describe("GET api/projects:id?", () => {
   it("GET/ should return status 200 and all document data", async () => {
-    const res = await request(app).get("/api/projects");
+    const res = await request(app)
+      .get("/api/projects")
+      .set("Authorization", `Bearer ${global.sessionToken}`);
     expect(res.status).toBe(200);
 
     expect(Array.isArray(res.body)).toBe(true);
@@ -110,7 +144,9 @@ describe("GET api/projects:id?", () => {
   });
 
   it("GET/ should return status 200 and one document when try to find with the document name", async () => {
-    const res = await request(app).get(`/api/projects/?name=${name}`);
+    const res = await request(app)
+      .get(`/api/projects/?name=${name}`)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
     expect(res.status).toBe(200);
 
     expect(Array.isArray(res.body)).toBe(true);
@@ -137,7 +173,9 @@ describe("GET api/projects:id?", () => {
 
   it("GET/ should return nothing when the db is empty", async () => {
     await clearDb();
-    const res = await request(app).get("/api/projects");
+    const res = await request(app)
+      .get("/api/projects")
+      .set("Authorization", `Bearer ${global.sessionToken}`);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body).toStrictEqual([]);
     expect(res.body.length).toBe(0);
@@ -152,7 +190,9 @@ describe("GET api/projects:id?", () => {
         throw new Error("Mock error");
       });
 
-    const res = await request(app).get("/api/projects");
+    const res = await request(app)
+      .get("/api/projects")
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(500);
     expect(res.body).toHaveProperty("message", "Error fetching projects");
@@ -164,7 +204,9 @@ describe("GET api/projects:id?", () => {
 describe("GET api/projects:id? when DB is disconnected", () => {
   it("GET/ should return status 503 when trying to get documents with DB down", async () => {
     await tearDownDb();
-    const res = await request(app).get("/api/projects");
+    const res = await request(app)
+      .get("/api/projects")
+      .set("Authorization", `Bearer ${global.sessionToken}`);
     expect(res.status).toBe(503);
     expect(res.body).toHaveProperty(
       "message",
@@ -176,12 +218,15 @@ describe("GET api/projects:id? when DB is disconnected", () => {
 
 describe("PUT api/projects/:id", () => {
   it("PUT/ should return the status 200 and message 'Success. Document updated'", async () => {
-    const res = await request(app).put(`/api/projects/${id}`).send({
-      name: "Put test",
-      description: "Put description",
-      url: "http://localhost:8080",
-      image: "http://randomImage.com/imgs.jpg",
-    });
+    const res = await request(app)
+      .put(`/api/projects/${id}`)
+      .send({
+        name: "Put test",
+        description: "Put description",
+        url: "http://localhost:8080",
+        image: "http://randomImage.com/imgs.jpg",
+      })
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     console.log("ID PUT: ", id);
 
@@ -189,16 +234,23 @@ describe("PUT api/projects/:id", () => {
     expect(res.body).toHaveProperty("message", "Success. Document updated");
   });
   it("PUT/ should return error when the id is wrong", async () => {
-    const res = await request(app).put(`/api/projects/120921`).send({
-      name: "Failed Put test",
-    });
+    const invalidId = new mongoose.Types.ObjectId().toString();
+    const res = await request(app)
+      .put(`/api/projects/${invalidId}`)
+      .send({
+        name: "Failed Put test",
+      })
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(404);
     expect(res.body).toHaveProperty("message", "Project not found");
   });
 
   it("PUT/ should return error when trying to use put without any updates", async () => {
-    const res = await request(app).put(`/api/projects/${id}`).send({});
+    const res = await request(app)
+      .put(`/api/projects/${id}`)
+      .send({})
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("message", "Nothing to update");
@@ -208,12 +260,16 @@ describe("PUT api/projects/:id", () => {
 describe("PUT api/projects/:id when DB is disconnected", () => {
   it("PUT/ should return status 503 when trying to update documents with DB down", async () => {
     await tearDownDb();
-    const res = await request(app).put(`/api/projects/${id}`).send({
-      name: "Put test",
-      description: "Put description",
-      url: "http://localhost:8080",
-      image: "http://randomImage.com/imgs.jpg",
-    });
+    const res = await request(app)
+      .put(`/api/projects/${id}`)
+      .send({
+        name: "Put test",
+        description: "Put description",
+        url: "http://localhost:8080",
+        image: "http://randomImage.com/imgs.jpg",
+      })
+      .set("Authorization", `Bearer ${global.sessionToken}`);
+
     expect(res.status).toBe(503);
     expect(res.body).toHaveProperty(
       "message",
@@ -225,13 +281,18 @@ describe("PUT api/projects/:id when DB is disconnected", () => {
 
 describe("DELETE api/projects/:id", () => {
   it("DELETE/ should return the status 204", async () => {
-    const res = await request(app).delete(`/api/projects/${id}`);
+    const res = await request(app)
+      .delete(`/api/projects/${id}`)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(204);
   });
 
   it("DELETE/ should return an error when the ID is wrong", async () => {
-    const res = await request(app).delete(`/api/projects/12334`);
+    const invalidId = new mongoose.Types.ObjectId().toString();
+    const res = await request(app)
+      .delete(`/api/projects/${invalidId}`)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(404);
     expect(res.body).toHaveProperty("message", "Project not found");
@@ -241,7 +302,9 @@ describe("DELETE api/projects/:id", () => {
 describe("DELETE api/projects/:id when DB is disconnected", () => {
   it("DELETE/ should return status 503 when trying to delete documents with DB down", async () => {
     await tearDownDb();
-    const res = await request(app).delete(`/api/projects/${id}`);
+    const res = await request(app)
+      .delete(`/api/projects/${id}`)
+      .set("Authorization", `Bearer ${global.sessionToken}`);
 
     expect(res.status).toBe(503);
     expect(res.body).toHaveProperty(
