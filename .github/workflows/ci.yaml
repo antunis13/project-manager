@@ -10,10 +10,6 @@ jobs:
   continuos-Integration:
     runs-on: ubuntu-latest
 
-    env:
-      NODE_ENV: test
-      CLERK_SECRET: ${{ secrets.CLERK_SECRET }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,8 +25,8 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Run Server
-        run: npm run start &
-
       - name: Run tests
-        run: npm run test
+        run: |
+          export CLERK_SECRET="${{ secrets.CLERK_SECRET }}" \
+          export NODE_ENV=test \
+          npm run test
