@@ -4,6 +4,7 @@ require('dotenv').config()
 const dbName = process.env.DB_NAME
 
 async function connect() {
+  if (process.env.NODE_ENV === 'test') return
   try {
     await mongoose.connect(`mongodb://localhost:27017/${dbName}`)
     const db = mongoose.connection
