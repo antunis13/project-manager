@@ -17,6 +17,8 @@ const ProjectsController = require('../controllers/projects')
  *     bearerAuth:
  *       type: http
  *       scheme: bearer
+ *       bearerFormat: JWT
+ *       description: JWT Authorization header using the Bearer scheme. Enter your JWT token in the text input below.
  *   security:
  *     - bearerAuth: []
  *   schemas:
@@ -80,10 +82,12 @@ const ProjectsController = require('../controllers/projects')
 
 /**
  * @swagger
- * /projects:
+ * /api/projects:
  *   get:
  *     summary: Returns all projects for the authenticated user
  *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: name
@@ -107,14 +111,16 @@ const ProjectsController = require('../controllers/projects')
  *         description: Internal server error while fetching projects
 
  */
-router.get('/projects', ProjectsController.get)
+router.get('/api/projects', ProjectsController.get)
 
 /**
  * @swagger
- * /projects:
+ * /api/projects:
  *   post:
  *     summary: Creates a new project
  *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -148,14 +154,16 @@ router.get('/projects', ProjectsController.get)
  *       500:
  *         description: Internal server error while creating project
  */
-router.post('/projects', ProjectsController.post)
+router.post('/api/projects', ProjectsController.post)
 
 /**
  * @swagger
- * /projects/{id}:
+ * /api/projects/{id}:
  *   put:
  *     summary: Updates a project by ID
  *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -183,14 +191,16 @@ router.post('/projects', ProjectsController.post)
  *       500:
  *         description: Internal server error while updating project
  */
-router.put('/projects/:id', ProjectsController.put)
+router.put('/api/projects/:id', ProjectsController.put)
 
 /**
  * @swagger
- * /projects/{id}:
+ * /api/projects/{id}:
  *   delete:
  *     summary: Deletes a project by ID
  *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -210,6 +220,6 @@ router.put('/projects/:id', ProjectsController.put)
  *       500:
  *         description: Internal server error while deleting project
  */
-router.delete('/projects/:id', ProjectsController.remove)
+router.delete('/api/projects/:id', ProjectsController.remove)
 
 module.exports = router

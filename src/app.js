@@ -17,6 +17,18 @@ app.use(express.json())
 
 app.use('/api', ClerkExpressRequireAuth(), projectRoutes)
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: `
+    .swagger-ui .topbar { display: none; }
+  `,
+    customSiteTitle: 'Project Manager API',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
+)
 
 module.exports = app

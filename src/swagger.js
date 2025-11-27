@@ -4,10 +4,16 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentation',
+      title: 'Project Manager API',
       version: '1.0.0',
       description: 'Project Manager API documentation',
     },
+    servers: [
+      {
+        url: 'http://localhost:8080',
+        description: 'Development server',
+      },
+    ],
   },
   apis: ['./src/routes/*.js'],
 }
