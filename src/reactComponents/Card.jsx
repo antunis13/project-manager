@@ -69,7 +69,7 @@ export default function Cards({
 
   return (
     <>
-      <div className="w-2/5 flex justify-center">
+      <div className="w-4/5 flex justify-center ">
         <Card className="border-none rounded-lg">
           <CardContent className="flex flex-wrap items-center justify-center mt-1">
             <img src={img} className="rounded-lg w-full" alt="Project image" />
@@ -82,13 +82,16 @@ export default function Cards({
                   <img src="../../public/imgs/moreIcon.png" width="25px" />
                 </Button>
               </DialogTrigger>
-              <DialogContent>
-                <CardDescription>{description}</CardDescription>
+              <DialogContent className="bg-secondary">
+                <CardDescription className="m-4 p-2">
+                  {description}
+                </CardDescription>
                 <CardContent>
-                  <Label className="m-4 ">Repository</Label>
-                  <a href="#" className="text-center my-1">
-                    {url}
-                  </a>
+                  <div className="my-1 border-[0.5px] border-gray-500 rounded-xl p-2">
+                    <a href="#" className="w-full h-full block flex">
+                      {url}
+                    </a>
+                  </div>
                 </CardContent>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setOpenEdit(true)}>
@@ -105,7 +108,7 @@ export default function Cards({
               </DialogContent>
             </Dialog>
             <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
-              <DialogContent>
+              <DialogContent className="bg-secondary">
                 <DialogTitle>Are you sure?</DialogTitle>
                 <CardDescription>
                   This action cannot be undone. The project will be permanently
@@ -128,7 +131,7 @@ export default function Cards({
             </Dialog>
 
             <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[425px] bg-secondary">
                 <DialogHeader>
                   <DialogTitle>Edit</DialogTitle>
                 </DialogHeader>

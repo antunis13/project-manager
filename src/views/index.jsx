@@ -160,7 +160,7 @@ export default function Home() {
               Add your project here
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] bg-secondary">
             <DialogHeader>
               <DialogTitle>Add Projects</DialogTitle>
               <DialogDescription>
