@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ProtectedRoute from '../reactComponents/ProtectedRoute.jsx'
 import Home from './index.jsx'
+import Layout from '../reactComponents/Layout.jsx'
 import SignInPage from '@/pages/signIn.jsx'
 
 const router = createBrowserRouter([
@@ -9,7 +10,9 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <ProtectedRoute>
-        <Home />
+        <Layout>
+          <Home />
+        </Layout>
       </ProtectedRoute>
     ),
   },

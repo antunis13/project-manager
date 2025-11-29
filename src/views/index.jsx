@@ -19,19 +19,19 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import schema from '../utils/formValidation'
 
-import Header from '../reactComponents/Header'
-import Footer from '../reactComponents/Footer'
 import Cards from '../reactComponents/Card'
 import { useAuth } from '@clerk/clerk-react'
 
 export default function Home() {
   const [projects, setProjects] = useState([])
+  const [openDialog, setOpenDialog] = useState(false)
 
   const { getToken } = useAuth()
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -98,7 +98,25 @@ export default function Home() {
       })
 
       if (res.status == '201') {
+        const getProjectsResponse = await fetch(
+          'http://localhost:8080/api/projects',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        if (getProjectsResponse.ok) {
+          const updatedProjects = await getProjectsResponse.json()
+          setProjects(updatedProjects)
+        }
+
+        setOpenDialog(false)
+
         toast.success('Projected has been created successfully')
+        reset()
       }
     } catch (error) {
       console.log('Error on craete project: ', error)
@@ -158,7 +176,6 @@ export default function Home() {
 
   return (
     <>
-      <Header />
       <div className="flex justify-end gap-2">
         <form onSubmit={handleSubmitSearch(onSearch)}>
           <Input
@@ -169,7 +186,11 @@ export default function Home() {
           />
           <button type="submit" hidden></button>
         </form>
-        <Dialog className="border-2">
+        <Dialog
+          open={openDialog}
+          onOpenChange={setOpenDialog}
+          className="border-2"
+        >
           <DialogTrigger asChild>
             <Button
               variant="outline"
@@ -261,7 +282,6 @@ export default function Home() {
           />
         ))}
       </section>
-      <Footer />
     </>
   )
 }
