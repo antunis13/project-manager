@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -43,7 +44,6 @@ export default function Home() {
     const getProjects = async () => {
       try {
         const token = await getToken()
-        console.log('Token: ', token)
         const res = await fetch('http://localhost:8080/api/projects', {
           method: 'GET',
           headers: {
@@ -56,6 +56,8 @@ export default function Home() {
         setProjects(data)
       } catch (error) {
         console.log('Error on get projects')
+
+        toast.error('Error on list projects')
       }
     }
     getProjects()
@@ -79,13 +81,14 @@ export default function Home() {
       setProjects(result)
     } catch (error) {
       console.log('Error on find project by name: ', error)
+      toast.error('Error on find project by name')
     }
   }
 
   const onSubmit = async (data) => {
     try {
       const token = await getToken()
-      await fetch('http://localhost:8080/api/projects', {
+      const res = await fetch('http://localhost:8080/api/projects', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -93,15 +96,20 @@ export default function Home() {
         },
         body: JSON.stringify(data),
       })
+
+      if (res.status == '201') {
+        toast.success('Projected has been created successfully')
+      }
     } catch (error) {
       console.log('Error on craete project: ', error)
+      toast.error('Error on create project')
     }
   }
 
   const deleteProject = async (id) => {
     try {
       const token = await getToken()
-      await fetch(`http://localhost:8080/api/projects/${id}`, {
+      const res = await fetch(`http://localhost:8080/api/projects/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,8 +117,13 @@ export default function Home() {
       })
 
       setProjects((prev) => prev.filter((p) => p._id !== id))
+
+      if (res.status == '204') {
+        toast.success('Project deleted')
+      }
     } catch (error) {
       console.log('Error on delete project: ', error)
+      toast.error('Error on delete project')
     }
   }
 
@@ -133,8 +146,13 @@ export default function Home() {
       setProjects((prev) =>
         prev.map((p) => (p._id === id ? updatedProject.data : p))
       )
+      console.log(res.status)
+      if (res.status == '201') {
+        toast.success('Project updated')
+      }
     } catch (error) {
       console.log('Error on update project: ', error)
+      toast.error('Error on update project')
     }
   }
 
