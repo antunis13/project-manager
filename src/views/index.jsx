@@ -20,6 +20,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import schema from '../utils/formValidation'
 
 import Cards from '../reactComponents/Card'
+import Dropzone from '../reactComponents/Dropzone'
+
 import { useAuth } from '@clerk/clerk-react'
 
 export default function Home() {
@@ -32,6 +34,8 @@ export default function Home() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -88,13 +92,17 @@ export default function Home() {
   const onSubmit = async (data) => {
     try {
       const token = await getToken()
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('url', data.url)
+      formData.append('description', data.description)
+      formData.append('image', data.image)
       const res = await fetch('http://localhost:8080/api/projects', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: formData,
       })
 
       if (res.status == '201') {
@@ -219,14 +227,8 @@ export default function Home() {
                   />
                   <p className="text-red-500 text-xs">{errors.name?.message}</p>
                 </div>
-                <div className="grid grid-cols-2 items-center gap-4">
-                  <Input
-                    type="url"
-                    id="image"
-                    placeholder="Image"
-                    className="col-span-3 p-6"
-                    {...register('image')}
-                  />
+                <div className="grid grid-cols-1 items-center gap-4">
+                  <Dropzone setValue={setValue} watch={watch} />
                   <p className="text-red-500 text-xs">
                     {errors.image?.message}
                   </p>

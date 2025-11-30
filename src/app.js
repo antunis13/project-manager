@@ -17,6 +17,8 @@ app.use(express.json())
 
 app.use('/api', ClerkExpressRequireAuth(), projectRoutes)
 
+app.use('/uploads', express.static('uploads'))
+
 app.use(
   '/api-docs',
   swaggerUi.serve,
