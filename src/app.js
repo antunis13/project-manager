@@ -3,6 +3,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerSpec = require('./swagger')
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 
 const projectRoutes = require('../src/routes/projects')
 const connect = require('../src/database/db')
@@ -17,7 +18,7 @@ app.use(express.json())
 
 app.use('/api', ClerkExpressRequireAuth(), projectRoutes)
 
-app.use('/uploads', express.static('uploads'))
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')))
 
 app.use(
   '/api-docs',

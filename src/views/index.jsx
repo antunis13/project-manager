@@ -48,6 +48,7 @@ export default function Home() {
     const getProjects = async () => {
       try {
         const token = await getToken()
+        // console.log(token)
         const res = await fetch('http://localhost:8080/api/projects', {
           method: 'GET',
           headers: {

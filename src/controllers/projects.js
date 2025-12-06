@@ -34,7 +34,8 @@ async function post(req, res) {
     const { userId } = req.auth
 
     const { name, url, description } = req.body
-    const image = `/uploads/${req.file.filename}`
+
+    const image = `/uploads/users/${userId}/${req.file.filename}`
 
     const register = new ProjectModel({
       name,

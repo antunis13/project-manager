@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const ProjectsController = require('../controllers/projects')
-const { upload } = require('../middleware/fileStorage')
+const { upload } = require('../middleware/fileStorage.js')
 
 router.get('/projects', ProjectsController.get)
 router.post('/projects', upload.single('image'), ProjectsController.post)
